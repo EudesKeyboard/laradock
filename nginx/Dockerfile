@@ -28,6 +28,15 @@ ARG PHP_UPSTREAM_PORT=9000
 # Create 'messages' file used from 'logrotate'
 RUN touch /var/log/messages
 
+###########################################################################
+# Set Timezone
+###########################################################################
+
+ARG TZ=UTC
+ENV TZ ${TZ}
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Copy 'logrotate' config file
 COPY logrotate/nginx /etc/logrotate.d/
 
@@ -39,4 +48,4 @@ ADD ./startup.sh /opt/startup.sh
 RUN sed -i 's/\r//g' /opt/startup.sh
 CMD ["/bin/bash", "/opt/startup.sh"]
 
-EXPOSE 80 443
+EXPOSE 80 443 4200
